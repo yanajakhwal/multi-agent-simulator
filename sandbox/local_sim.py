@@ -4,8 +4,11 @@ from typing import Dict, List
 
 
 PRICE_ALPHA = 0.1 # sensitivity of price to supply/demand
-
-@dataclass
+NUM_CONSUMERS = 10
+NUM_PRODUCERS = 3
+INITIAL_CONSUMER_WEALTH = 50.0
+INITIAL_FOOD_QUANTITY = 20.0
+INITIAL_FOOD_PRICE = 3.0
 class Agent:
     id: str
     role: str # either "consumer" or "producer" 
@@ -45,7 +48,43 @@ class Market:
 
 @dataclass
 class World:
-    pass
+    agents: List[Agent]
+    market: Market
+
+
+def createInitialWorld() -> World:
+    agents: List[World] = []
+
+    # consumers 
+    for i in range(NUM_CONSUMERS):
+        agents.append(
+            Agent(
+                id = f"C{i}",
+                role = "consumer",
+                wealth = INITIAL_CONSUMER_WEALTH
+            )
+        )
+
+    # producers 
+    for i in range(NUM_PRODUCERS):
+        agents.append(
+            Agent(
+                id = f"P{i}",
+                role = "producer",
+                wealth = NUM_PRODUCERS
+            )
+        )
+    
+    market = Market(
+        goods = {
+            "food": {
+                "quantity": INITIAL_FOOD_QUANTITY,
+                "price":INITIAL_FOOD_PRICE
+            }
+        }
+    )
+    
+    return World(agents=agents, market=market)
 
 def main():
     pass
