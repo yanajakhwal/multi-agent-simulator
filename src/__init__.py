@@ -1,2 +1,0 @@
-# Multi-Agent Economy Simulator
-
