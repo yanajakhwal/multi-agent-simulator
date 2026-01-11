@@ -10,8 +10,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.core.simulation import Simulation
 
 def main():
-    print("🚀 Starting Phase 1 Simulation...")
-    print("=" * 50)
+    print("🚀 Starting Phase 1 Simulation (Random Actions)...")
+    print("=" * 60)
     
     # Create simulation
     sim = Simulation(seed=42)
@@ -20,15 +20,18 @@ def main():
     print(f"Agents: {len(sim.agents)}")
     print(f"Market: {sim.market}")
     print()
+    print("🎲 Agents use RANDOM actions (legacy mode)")
+    print("   For smart agents, use: python scripts/run_phase1_smart.py")
+    print()
     
     # Run simulation for 100 ticks
     num_ticks = 100
     
     print(f"Running {num_ticks} ticks...")
-    print("-" * 50)
+    print("-" * 60)
     
     for i in range(num_ticks):
-        sim.step()
+        sim.step(use_smart_decisions=False)  # Use random actions
         
         # Print summary every 10 ticks
         if (i + 1) % 10 == 0:
@@ -40,7 +43,7 @@ def main():
                   f"ore={state['prices']['ore']:.2f}, "
                   f"tools={state['prices']['tools']:.2f}")
     
-    print("-" * 50)
+    print("-" * 60)
     print("\n✅ Simulation completed!")
     
     # Final summary

@@ -11,6 +11,7 @@ from collections import defaultdict
 from .world import World, Cell
 from .agent import Agent, Consumer, Producer, Trader, create_agent
 from .market import Market
+from .decision_maker import DecisionMaker
 from .config import (
     WORLD_WIDTH,
     WORLD_HEIGHT,
@@ -53,6 +54,9 @@ class Simulation:
             "agent_count": [],
             "avg_prices": defaultdict(list),
         }
+        
+        # Decision maker for smart agent actions
+        self.decision_maker = DecisionMaker(self.world, self.market)
     
     def _create_agents(self):
         """Create and place agents in the world."""
@@ -92,18 +96,22 @@ class Simulation:
             self.agents[agent.id] = agent
             agent_id += 1
     
-    def step(self, actions: Optional[Dict[str, int]] = None):
+    def step(self, actions: Optional[Dict[str, int]] = None, use_smart_decisions: bool = True):
         """
         Execute one simulation step.
         
         Args:
             actions: Optional dict of agent_id -> action_id
-                    If None, agents take random actions
+                    If None, agents take smart actions (or random if use_smart_decisions=False)
+            use_smart_decisions: If True, use rule-based decision making (default: True)
         """
         self.tick += 1
         
         if actions is None:
-            actions = self._get_random_actions()
+            if use_smart_decisions:
+                actions = self._get_smart_actions()
+            else:
+                actions = self._get_random_actions()
         
         # Execute actions
         rewards = {}
@@ -128,8 +136,15 @@ class Simulation:
         # Update metrics
         self._update_metrics()
     
+    def _get_smart_actions(self) -> Dict[str, int]:
+        """Get smart rule-based actions for all agents."""
+        actions = {}
+        for agent_id, agent in self.agents.items():
+            actions[agent_id] = self.decision_maker.decide_action(agent)
+        return actions
+    
     def _get_random_actions(self) -> Dict[str, int]:
-        """Get random actions for all agents."""
+        """Get random actions for all agents (fallback/legacy)."""
         actions = {}
         for agent_id in self.agents.keys():
             # Simple random actions: 0=stay, 1-4=move, 5-10=trade
