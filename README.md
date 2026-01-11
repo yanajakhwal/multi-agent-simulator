@@ -1,93 +1,71 @@
-# Distributed Multi-Agent Economy Simulator (RL)
+# Distributed Multi-Agent Economy Simulator
 
-A distributed multi-agent simulation system where agents (consumers, producers, traders) interact in a 2D world, controlled by reinforcement learning policies.
-
-## 📋 Overview
-
-This project simulates an economy with:
-- **Agents** that move, trade, and produce goods
-- **Markets** with dynamic pricing based on supply/demand
-- **RL policies** that control agent behavior (Phase 4)
-- **Distributed architecture** with sharded regions (Phase 3)
+A multi-agent simulation system where agents (consumers, producers, traders) interact in a 2D world with dynamic markets and smart decision-making.
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Python 3.10+
-- pip
-
 ### Setup
 
-**Virtual environment is already created!** Just activate it:
-
 ```bash
+# Activate virtual environment
 source venv/bin/activate
-```
 
-You'll see `(venv)` in your terminal prompt when it's active.
-
-**Install dependencies** (if not already installed):
-```bash
+# Install dependencies (if needed)
 pip install -r requirements.txt
 ```
 
 ### Run the Simulation
 
-**With smart agents** (recommended):
+**🎨 Visualization Dashboard** (Recommended):
 ```bash
+python scripts/run_dashboard.py
+```
+Then open http://localhost:8050 in your browser!
+
+**Command Line:**
+```bash
+# Smart agents
 python scripts/run_phase1_smart.py
-```
 
-**With random agents** (legacy):
-```bash
+# Random agents
 python scripts/run_phase1.py
-```
 
-**Compare both**:
-```bash
+# Compare both
 python scripts/compare_decisions.py
 ```
 
-## 📁 Project Structure
+## 📋 What It Does
+
+This simulation creates a mini economy where:
+- **22 agents** (consumers, producers, traders) move around a 30×30 world
+- **Markets** set prices based on supply and demand
+- **Agents** make smart decisions (buy food when health low, produce goods, trade for profit)
+- **Prices fluctuate** as agents trade and produce
+- **Agents can die** if they don't get food
+
+### How It Works
+
+1. **World**: 30×30 grid with farms, mines, markets, and plains
+2. **Agents**: Each agent has health, wealth, and inventory
+3. **Market**: Prices change based on supply/demand each tick
+4. **Decisions**: Agents use rule-based logic to survive and profit
+5. **Simulation**: Runs in ticks, updating everything each step
+
+### Example Output
 
 ```
-multi-agent-simulator/
-├── src/
-│   ├── core/          # Core game logic (Phase 1) ✅
-│   ├── region/        # Region logic (Phase 2)
-│   ├── coordinator/   # Coordinator (Phase 2-3)
-│   ├── rl/            # RL components (Phase 4)
-│   ├── services/      # HTTP services (Phase 3-4)
-│   └── dashboard/     # Visualization (Phase 5)
-├── tests/             # Unit tests ✅
-├── scripts/           # Run scripts ✅
-└── docs/              # Documentation
+Tick  10 | Agents: 22 | Wealth: 1688.6 | Prices: food=1.04, ore=0.91
+Tick  20 | Agents: 22 | Wealth: 1693.3 | Prices: food=0.94, ore=1.17
+Tick 100 | Agents: 19 | Wealth: 1480.9 | Prices: food=0.42, ore=8.94
 ```
 
-## ✅ Current Status
+## 🎮 Using the Dashboard
 
-**Phase 1: Complete!** ✅
-
-- ✅ World with terrain (farms, mines, markets)
-- ✅ 3 agent types (Consumers, Producers, Traders)
-- ✅ Market with dynamic pricing
-- ✅ Smart rule-based decision-making
-- ✅ Full simulation loop
-- ✅ Testing infrastructure
-
-**What works:**
-- Agents move, trade, and produce goods
-- Prices fluctuate based on supply/demand
-- Agents make smart decisions (buy food when health low, etc.)
-- Simulation runs 100+ ticks stably
-
-## 🗺️ Implementation Phases
-
-- **Phase 1**: Single-process prototype ✅ **DONE**
-- **Phase 2**: Multi-region, single process
-- **Phase 3**: Multi-service split (HTTP)
-- **Phase 4**: RL integration
-- **Phase 5**: Visualization & polish
+The dashboard shows:
+- **World Map**: See agents moving on the grid
+- **Price Charts**: Watch prices change over time
+- **Statistics**: Agent count, wealth, health
+- **Controls**: Start/Stop/Step buttons
 
 ## 🧪 Testing
 
@@ -99,11 +77,33 @@ pytest tests/ -v
 python scripts/test_world.py
 ```
 
-## 📚 Documentation
+## 📁 Project Structure
 
-- **[GUIDE.md](GUIDE.md)** - How it works, testing, smart agents, setup
-- **[DESIGN_DOC.md](DESIGN_DOC.md)** - Complete system design
-- **[DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)** - Key implementation decisions
+```
+multi-agent-simulator/
+├── src/core/       # Simulation logic
+├── src/dashboard/ # Visualization
+├── scripts/        # Run scripts
+└── tests/          # Unit tests
+```
+
+## ✅ Current Features
+
+- ✅ 2D world with terrain
+- ✅ 3 agent types (Consumers, Producers, Traders)
+- ✅ Dynamic market pricing
+- ✅ Smart agent decision-making
+- ✅ Real-time visualization dashboard
+- ✅ Full simulation loop
+
+## 🗺️ Future Plans
+
+- ⏭️ RL Integration (agents learn from experience)
+- ⏭️ Multi-region support
+- ⏭️ HTTP services (distributed architecture)
+- ⏭️ Cloud deployment
+
+See [DEVELOPER.md](DEVELOPER.md) for detailed technical documentation.
 
 ## 📝 License
 
