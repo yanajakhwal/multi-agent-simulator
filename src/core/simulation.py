@@ -249,14 +249,19 @@ class Simulation:
                 self.market.add_supply("food", 1.0)
                 return
         
-        # Check for mine (tool production)
+        # Check for mine (ore or tool production)
         for resource_cell in adjacent_resources:
             if resource_cell.terrain_type == "mine":
-                # Need ore to produce tools
+                # Priority: Produce tools if have ore (higher value)
                 if agent.remove_inventory("ore", ORE_TO_TOOLS_RATIO):
                     agent.add_inventory("tools", 1.0)
                     self.market.add_supply("tools", 1.0)
                     return
+                
+                # Otherwise, produce ore (raw material from mine)
+                agent.add_inventory("ore", 1.0)
+                self.market.add_supply("ore", 1.0)
+                return
     
     def _update_health(self):
         """Update agent health based on food consumption."""

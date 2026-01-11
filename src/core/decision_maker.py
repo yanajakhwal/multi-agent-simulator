@@ -93,8 +93,7 @@ class DecisionMaker:
         Priority:
         1. Produce if near resources
         2. Sell goods if have excess
-        3. Buy ore if need it for production
-        4. Move toward resources if not near any
+        3. Move toward resources if not near any
         """
         cell = self.world.get_cell(agent.x, agent.y)
         adjacent_resources = self.world.get_adjacent_resource_cells(agent.x, agent.y)
@@ -107,23 +106,22 @@ class DecisionMaker:
                     # Produce food
                     return self.PRODUCE
             
-            # Check if near mine (can produce tools if have ore)
+            # Check if near mine (can produce ore or tools)
             for resource in adjacent_resources:
                 if resource.terrain_type == "mine":
-                    if agent.has_inventory("ore", 2.0):
-                        return self.PRODUCE
-            
-            # Near mine but no ore - try to buy ore
-            ore_price = self.market.get_price("ore")
-            if agent.can_afford(ore_price) and self.market.get_quantity("ore") > 0:
-                return self.BUY_ORE
+                    # Can always produce ore from mine, or tools if have ore
+                    # Production logic will prioritize tools if ore available
+                    return self.PRODUCE
         
         # Priority 2: Sell goods if have excess
         food_inventory = agent.inventory.get("food", 0.0)
+        ore_inventory = agent.inventory.get("ore", 0.0)
         tools_inventory = agent.inventory.get("tools", 0.0)
         
         if food_inventory > 3:
             return self.SELL_FOOD
+        if ore_inventory > 5:  # Sell excess ore if have too much
+            return self.SELL_ORE
         if tools_inventory > 2:
             return self.SELL_TOOLS
         
@@ -215,4 +213,3 @@ class DecisionMaker:
                         nearest = cell
         
         return nearest
-
